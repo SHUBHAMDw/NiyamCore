@@ -1,0 +1,31 @@
+# config/project_env.yml
+
+project:
+  name: NiyamCore
+  version: 1.0.0
+  description: "Configurable Data Quality Framework built on Apache Spark"
+
+environment:
+  spark:
+    master: "local[*]"          # Spark master URL (e.g., local, yarn, spark://host:port)
+    app_name: "NiyamCoreApp"   # Spark application name
+    config:
+      spark.sql.shuffle.partitions: 4
+      spark.executor.memory: "2g"
+
+  python:
+    version: "3.8"
+    dependencies:
+      - pyspark==3.4.1
+      - pyyaml
+      - pytest
+
+  data_sources:
+    customer_data_path: "s3://your-bucket/path/customers/"
+    orders_data_path: "s3://your-bucket/path/orders/"
+
+logging:
+  level: INFO
+  log_path: "./logs/niyamcore.log"
+  max_file_size_mb: 10
+  backup_count: 5
