@@ -1,4 +1,4 @@
-from validators.base_validations import NiyamCoreValidator
+from niyamcore.base_validations import NiyamCoreValidator
 
 # Usage example
 validator = NiyamCoreValidator(df)

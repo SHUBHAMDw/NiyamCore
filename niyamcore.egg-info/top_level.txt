@@ -1,1 +1,1 @@
-ValidationConfigParser
+niyamcore

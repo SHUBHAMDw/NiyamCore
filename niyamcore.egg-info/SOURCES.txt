@@ -2,6 +2,7 @@ README.md
 setup.py
 niyamcore/ValidationConfigParser.py
 niyamcore/__init__.py
+niyamcore/base_validations.py
 niyamcore/runner.py
 niyamcore.egg-info/PKG-INFO
 niyamcore.egg-info/SOURCES.txt
