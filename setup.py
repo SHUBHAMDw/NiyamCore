@@ -3,11 +3,12 @@ from setuptools import setup, find_packages
 setup(
     name='niyamcore',
     version='0.1.0',
-    description='Data Quality Validation Framework on PySpark',
+    description='Configurable data validation framework on PySpark',
     author='Shubham Dwivedi',
-    packages=find_packages(),
+    packages=find_packages(include=['validators*']),
+    py_modules=['ValidationConfigParser'],
     install_requires=[
-        'pyspark>=3.1.2',
+        'pyspark>=3.0.0',
         'pyyaml'
     ],
 )

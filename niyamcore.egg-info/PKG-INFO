@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: niyamcore
 Version: 0.1.0
-Summary: Data Quality Validation Framework on PySpark
+Summary: Configurable data validation framework on PySpark
 Home-page: UNKNOWN
 Author: Shubham Dwivedi
 License: UNKNOWN
