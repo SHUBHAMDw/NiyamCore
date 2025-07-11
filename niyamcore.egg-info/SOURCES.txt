@@ -1,0 +1,7 @@
+README.md
+setup.py
+niyamcore.egg-info/PKG-INFO
+niyamcore.egg-info/SOURCES.txt
+niyamcore.egg-info/dependency_links.txt
+niyamcore.egg-info/requires.txt
+niyamcore.egg-info/top_level.txt
