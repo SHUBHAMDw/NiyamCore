@@ -1,0 +1,59 @@
+# my_validation_rules.yaml
+
+validation_config:
+  name: "ProductInventoryValidation"
+  description: "Rules for validating product inventory records."
+  source_path: "your_database.product_inventory_table" # e.g., a Delta table
+
+  validation_settings:
+    fail_on_first_error: false
+    output_mode: "add_error_column" # Options: log_only, add_error_column, fail_dataframe
+    error_column_name: "inventory_validation_errors"
+
+  schema_expectations:
+    - column_name: "product_id"
+      data_type: "string"
+      nullable: false
+    - column_name: "stock_quantity"
+      data_type: "integer"
+      nullable: false
+    - column_name: "last_updated_date"
+      data_type: "date"
+      nullable: true
+
+  column_validations:
+    - column: "product_id"
+      rules:
+        - type: "not_null"
+          severity: "ERROR"
+          error_message: "Product ID cannot be null."
+        - type: "unique"
+          severity: "ERROR"
+          error_message: "Product ID must be unique."
+
+    - column: "stock_quantity"
+      rules:
+        - type: "is_numeric"
+          severity: "ERROR"
+          error_message: "Stock quantity must be numeric."
+        - type: "range"
+          min: 0
+          max: 10000
+          severity: "ERROR"
+          error_message: "Stock quantity must be between 0 and 10000."
+        - type: "not_null"
+          when_condition: "product_status = 'ACTIVE'" # Example: active products must have quantity
+          severity: "ERROR"
+          error_message: "Active products must have a stock quantity."
+
+    - column: "last_updated_date"
+      rules:
+        - type: "before_or_equal_to_current_date"
+          severity: "WARNING"
+          error_message: "Last updated date is in the future."
+
+  row_validations:
+    - name: "ActiveProductPositiveStock"
+      condition: "product_status = 'ACTIVE' AND stock_quantity <= 0" # Fails if active product has non-positive stock
+      severity: "ERROR"
+      error_message: "Active products must have a positive stock quantity."
