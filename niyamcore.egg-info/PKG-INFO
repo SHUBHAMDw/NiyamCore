@@ -1,10 +1,11 @@
-Metadata-Version: 2.4
+Metadata-Version: 2.1
 Name: niyamcore
 Version: 0.1.0
 Summary: Configurable data validation framework on PySpark
+Home-page: UNKNOWN
 Author: Shubham Dwivedi
-Requires-Dist: pyspark>=3.0.0
-Requires-Dist: pyyaml
-Dynamic: author
-Dynamic: requires-dist
-Dynamic: summary
+License: UNKNOWN
+Platform: UNKNOWN
+
+UNKNOWN
+
