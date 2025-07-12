@@ -4,4 +4,7 @@ from niyamcore.base_validations import NiyamCoreValidator
 # validator = NiyamCoreValidator(df)
 # result = validator.not_null_check(['customer_id', 'email'])
 # print(result)
-print("Hello guysssss!")
+
+class run_validation:
+    def run_validation():
+        print("Hello guysssss!")
