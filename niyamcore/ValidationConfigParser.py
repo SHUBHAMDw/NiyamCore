@@ -1,5 +1,6 @@
 import yaml
 import logging
+logger = logging.getLogger(__name__) 
 class ValidationConfigParser:
     """
     Parses dataset validation config JSON and provides an iterator
@@ -49,7 +50,7 @@ class ValidationConfigParser:
             
             # Collect all lines and join them.
             # .collect() brings data to driver, so be mindful of very large config files (> ~10MB)
-            config_content = "".join([row[0] for row in config_df.collect()])
+            config_content = "\n".join([row[0] for row in config_df.collect()])
             
             if not config_content.strip(): # Check if content is empty after stripping whitespace
                 raise FileNotFoundError(f"Config file is empty or not found at: {config_path}")
@@ -71,6 +72,7 @@ class ValidationConfigParser:
 
         try:
             config_dict = yaml.safe_load(config_content)
+            print(config_dict)
             logger.info(f"Successfully loaded validation config from: {config_path}")
             return config_dict
         except yaml.YAMLError as e:
