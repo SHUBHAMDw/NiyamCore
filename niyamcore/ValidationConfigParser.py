@@ -5,6 +5,7 @@ class ValidationConfigParser:
     Parses dataset validation config JSON and provides an iterator
     to yield dataset name with each validation type and parameters.
     """
+    logger = logging.getLogger(__name__) 
 
     def __init__(self, config_json):
         """
