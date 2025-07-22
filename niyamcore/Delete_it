@@ -1,85 +1,43 @@
-import logging
-from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DateType, BooleanType, ArrayType
-
-# Configure basic logging for demonstration
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logging.getLogger('py4j').setLevel(logging.WARNING) # Suppress Py4J too verbose logs
-logging.getLogger('pyspark').setLevel(logging.WARNING)
-
-# Import your validator and rules (assuming niyamcore is in your Python path or current directory)
-from niyamcore.ColumnValidator import ColumnValidator
-# You don't typically import individual rules directly when using the factory,
-# but they need to be defined in their files for the factory to find them.
-
-# For demonstration, manually create a SparkSession
-spark = SparkSession.builder.appName("ColumnValidationTest").master("local[*]").getOrCreate()
-
-# Create a dummy DataFrame for testing column validations
-# Note: stock_quantity has nulls for active products and negative values
-#       product_id has a duplicate
-#       last_updated_date is "future" for prod4
-actual_data = [
-    ("prod1", 100, "2023-01-01", "ACTIVE", []), # Existing error column, empty
-    ("prod2", 200, "2023-01-02", "INACTIVE", ["Existing Error 1"]), # Existing error column, with some errors
-    ("prod3", None, "2023-01-03", "ACTIVE", []), # NotNull and Range for stock_quantity (when_condition)
-    ("prod1", 50, "2023-01-04", "ACTIVE", []),  # Duplicate product_id
-    ("prod4", -10, "2023-01-05", "ACTIVE", []), # Range for stock_quantity
-    ("prod5", 75, "2025-07-15", "ACTIVE", []), # Placeholder for future date check
-    ("prod6", 12345, "2024-01-01", "ACTIVE", []), # Range for stock_quantity (too high)
-    ("prod7", 5000, "2024-01-01", "INACTIVE", []),
-    (None, 1000, "2024-01-01", "ACTIVE", []) # Null product_id
-]
-actual_schema = StructType([
-    StructField("product_id", StringType(), True),
-    StructField("stock_quantity", IntegerType(), True),
-    StructField("last_updated_date", StringType(), True), # Store as String for now to simplify
-    StructField("product_status", StringType(), True),
-    StructField("validation_errors", ArrayType(StringType()), True) # Pre-existing error column
-])
-df = spark.createDataFrame(actual_data, actual_schema)
-print("--- Original DataFrame ---")
-df.printSchema()
-df.show(truncate=False)
-
-
-# Your YAML column validations config (parsed from your config file)
-column_validations_from_yaml = [
-    {
-        "column": "product_id",
-        "rules": [
-            {"type": "not_null", "severity": "ERROR", "error_message": "Product ID cannot be null."},
-            {"type": "unique", "severity": "ERROR", "error_message": "Product ID must be unique."}
-        ]
-    },
-    {
-        "column": "stock_quantity",
-        "rules": [
-            # {"type": "is_numeric", "severity": "ERROR", "error_message": "Stock quantity must be numeric."}, # Placeholder - implement IsNumericRule
-            {"type": "range", "min": 0, "max": 10000, "severity": "ERROR", "error_message": "Stock quantity must be between 0 and 10000."},
-            {"type": "not_null", "when_condition": "product_status = 'ACTIVE'", "severity": "ERROR", "error_message": "Active products must have a stock quantity."}
-        ]
-    },
-    {
-        "column": "last_updated_date",
-        "rules": [
-            # {"type": "before_or_equal_to_current_date", "severity": "WARNING", "error_message": "Last updated date is in the future."} # Placeholder - implement this rule
-        ]
-    }
-]
-
-# Create an instance of ColumnValidator
-column_validator = ColumnValidator(column_validations_from_yaml, error_column_name="validation_errors")
-
-# Run the validation
-validated_df = column_validator.apply_validations(df)
-
-# Show the DataFrame with the new error column
-print("\n--- Validated DataFrame with Errors ---")
-validated_df.select("product_id", "stock_quantity", "product_status", "last_updated_date", "validation_errors").show(truncate=False)
-
-# Optionally, filter for rows with errors
-print("\n--- Rows with Validation Errors ---")
-validated_df.filter(F.size(F.col("validation_errors")) > 0).select("product_id", "stock_quantity", "product_status", "validation_errors").show(truncate=False)
-
-spark.stop()
+{'validation_config': {'name': 'ProductInventoryValidation',
+  'description': 'Rules for validating product inventory records.',
+  'source_path': 'your_database.product_inventory_table',
+  'validation_settings': {'fail_on_first_error': False,
+   'output_mode': 'add_error_column',
+   'error_column_name': 'inventory_validation_errors'},
+  'schema_expectations': [{'column_name': 'product_id',
+    'data_type': 'string',
+    'nullable': False},
+   {'column_name': 'stock_quantity',
+    'data_type': 'integer',
+    'nullable': False},
+   {'column_name': 'last_updated_date',
+    'data_type': 'date',
+    'nullable': True}],
+  'column_validations': [{'column': 'product_id',
+    'rules': [{'type': 'not_null',
+      'severity': 'ERROR',
+      'error_message': 'Product ID cannot be null.'},
+     {'type': 'unique',
+      'severity': 'ERROR',
+      'error_message': 'Product ID must be unique.'}]},
+   {'column': 'stock_quantity',
+    'rules': [{'type': 'is_numeric',
+      'severity': 'ERROR',
+      'error_message': 'Stock quantity must be numeric.'},
+     {'type': 'range',
+      'min': 0,
+      'max': 10000,
+      'severity': 'ERROR',
+      'error_message': 'Stock quantity must be between 0 and 10000.'},
+     {'type': 'not_null',
+      'when_condition': "product_status = 'ACTIVE'",
+      'severity': 'ERROR',
+      'error_message': 'Active products must have a stock quantity.'}]},
+   {'column': 'last_updated_date',
+    'rules': [{'type': 'before_or_equal_to_current_date',
+      'severity': 'WARNING',
+      'error_message': 'Last updated date is in the future.'}]}],
+  'row_validations': [{'name': 'ActiveProductPositiveStock',
+    'condition': "product_status = 'ACTIVE' AND stock_quantity <= 0",
+    'severity': 'ERROR',
+    'error_message': 'Active products must have a positive stock quantity.'}]}}

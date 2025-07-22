@@ -6,7 +6,7 @@ import pyspark.sql.functions as F
 from pyspark.sql.types import ArrayType, StringType
 
 # Import the validator classes
-from niyamcore.SchemaValidator import SchemaValidator
+from niyamcore.schema_expectations import SchemaValidator
 from niyamcore.ColumnValidator import ColumnValidator
 from niyamcore.RowValidator import RowValidator
 
