@@ -18,6 +18,8 @@ class ValidationRunner:
     It takes the parsed configuration and a DataFrame, then applies schema,
     column, and row validations. It also manages the output based on settings.
     """
+    def Test():
+        print("Test method in ValidationRunner called.")
 
     def __init__(self, spark_session: SparkSession):
         """
