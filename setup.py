@@ -7,7 +7,6 @@ setup(
     author='Shubham Dwivedi',
     packages=find_packages(include=['niyamcore*']),
     install_requires=[
-        # Remove 'pyspark>=3.0.0' from here
         'pyyaml'
     ],
 )
