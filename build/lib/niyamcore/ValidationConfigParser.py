@@ -77,6 +77,7 @@ class ValidationConfigParser:
             config_dict = yaml.safe_load(config_content)
             print(config_dict)
             logger.info(f"Successfully loaded validation config from: {config_path}")
+            print("Type of config_dict:", type(config_dict))
             runner = ValidationRunner(spark)
             validated_df = runner.run_validations(dataframe=dataframe, parsed_config=config_dict)
             return validated_df
