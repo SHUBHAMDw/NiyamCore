@@ -1,6 +1,7 @@
 import yaml
 import logging
-/
+from niyamcore.runner import ValidationRunner
+# from niyamcore.runner import run_validation
 logger = logging.getLogger(__name__) 
 class ValidationConfigParser:
     """
@@ -75,7 +76,7 @@ class ValidationConfigParser:
             config_dict = yaml.safe_load(config_content)
             print(config_dict)
             logger.info(f"Successfully loaded validation config from: {config_path}")
-            run_validation.run_validation(config_dict)
+            runner.run_validation(config_dict)
             
         except yaml.YAMLError as e:
             logger.error(f"Error parsing YAML config from {config_path}: {e}")

@@ -4,7 +4,6 @@ niyamcore/ColumnValidator.py
 niyamcore/RowValidator.py
 niyamcore/ValidationConfigParser.py
 niyamcore/__init__.py
-niyamcore/base_validations.py
 niyamcore/row_validations.py
 niyamcore/runner.py
 niyamcore/schema_expectations.py
