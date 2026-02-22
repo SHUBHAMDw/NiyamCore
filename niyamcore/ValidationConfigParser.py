@@ -26,7 +26,7 @@ class ValidationConfigParser:
             yield (self.dataset_name, validation_type, params)
 
     @staticmethod
-    def parse_config(spark,config_path: str) -> dict:
+    def parse_config(spark,dataframe: DataFrame,config_path: str) -> dict:
         """
         Loads and parses a YAML configuration file from the given path.
         Assumes the path is accessible by the Databricks cluster (e.g., DBFS, Volumes, Workspace Files).
@@ -76,7 +76,7 @@ class ValidationConfigParser:
             config_dict = yaml.safe_load(config_content)
             print(config_dict)
             logger.info(f"Successfully loaded validation config from: {config_path}")
-            ValidationRunner.run_validations(config_dict)
+            ValidationRunner.run_validations(dataframe=dataframe, parsed_config=config_dict)
             
         except yaml.YAMLError as e:
             logger.error(f"Error parsing YAML config from {config_path}: {e}")
