@@ -76,7 +76,7 @@ class ValidationConfigParser:
             config_dict = yaml.safe_load(config_content)
             print(config_dict)
             logger.info(f"Successfully loaded validation config from: {config_path}")
-            runner.run_validation(config_dict)
+            ValidationRunner.run_validations(config_dict)
             
         except yaml.YAMLError as e:
             logger.error(f"Error parsing YAML config from {config_path}: {e}")
