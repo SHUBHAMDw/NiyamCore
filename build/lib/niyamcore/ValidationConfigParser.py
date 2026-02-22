@@ -1,6 +1,6 @@
 import yaml
 import logging
-from niyamcore.runner import run_validation
+/
 logger = logging.getLogger(__name__) 
 class ValidationConfigParser:
     """
