@@ -75,8 +75,11 @@ class ValidationRunner:
         validated_df = dataframe
         all_schema_errors_found = []
 
+        validated_df.show(5) # Show initial data for debugging--Debugging line, can be removed in production
+
         # --- 2. Run Schema Validations ---
         schema_expectations = parsed_config.get("schema_expectations")
+        print
         if schema_expectations:
             logger.info("Running Schema Validations...")
             print("Running Schema Validations...")
