@@ -48,6 +48,7 @@ class ValidationRunner:
             Exception: If 'fail_dataframe' mode is enabled and critical errors are found.
         """
         logger.info("Starting validation pipeline...")
+        print("Starting validation pipeline...")
 
         # --- 1. Get Global Validation Settings ---
         validation_settings = parsed_config.get("validation_settings", {})
