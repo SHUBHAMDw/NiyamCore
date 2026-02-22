@@ -76,10 +76,12 @@ class ValidationRunner:
         all_schema_errors_found = []
 
         validated_df.show(5) # Show initial data for debugging--Debugging line, can be removed in production
+        print("Parsed config value",parsed_config) # Debugging line to check the entire parsed config
+        print("Parsed config for validation settings: ", validation_settings) # Debugging line to check parsed validation settings
 
         # --- 2. Run Schema Validations ---
         schema_expectations = parsed_config.get("schema_expectations")
-        print
+        print("Schema expectations from config: ", schema_expectations) # Debugging line to check schema expectations loaded from config
         if schema_expectations:
             logger.info("Running Schema Validations...")
             print("Running Schema Validations...")
