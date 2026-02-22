@@ -78,6 +78,7 @@ class ValidationRunner:
         schema_expectations = parsed_config.get("schema_expectations")
         if schema_expectations:
             logger.info("Running Schema Validations...")
+            print("Running Schema Validations...")
             schema_validator = SchemaValidator(schema_expectations)
             current_schema_errors = schema_validator.validate_schema(validated_df)
             
@@ -89,6 +90,7 @@ class ValidationRunner:
                 # If a critical column is missing due to schema, subsequent validations might fail.
             else:
                 logger.info("Schema Validations passed.")
+                print("Schema Validations passed.")
 
         # --- Check if any critical schema errors demand immediate halt (if fail_dataframe is on) ---
         if output_mode == "fail_dataframe":
