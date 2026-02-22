@@ -79,6 +79,7 @@ class ValidationConfigParser:
             logger.info(f"Successfully loaded validation config from: {config_path}")
             runner = ValidationRunner(spark)
             validated_df = runner.run_validations(dataframe=dataframe, parsed_config=config_dict)
+            return validated_df
             
         except yaml.YAMLError as e:
             logger.error(f"Error parsing YAML config from {config_path}: {e}")
