@@ -60,6 +60,8 @@ class UniqueRule(BaseValidationRule):
                                                     .filter(F.col("count") > 1) \
                                                     .filter(F.col(column_name).isNotNull()) \
                                                     .select(column_name)
+        print("Duplicate values found for UniqueRule on column '{}':".format(column_name)) # Debugging line
+        duplicate_values_df.show(5) # Debugging line to check the duplicate values found--can be removed in production
 
         # Broadcast the smaller DataFrame of duplicate values for efficient joining
         # Mark rows in the original DataFrame that contain a duplicate value
