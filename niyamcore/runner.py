@@ -79,7 +79,7 @@ class ValidationRunner:
 
         # --- 2. Run Schema Validations ---
         schema_expectations = parsed_config.get("schema_expectations")
-        print
+        print("Schema expectations from config: ", schema_expectations) # Debugging line to check schema expectations loaded from config
         if schema_expectations:
             logger.info("Running Schema Validations...")
             print("Running Schema Validations...")
