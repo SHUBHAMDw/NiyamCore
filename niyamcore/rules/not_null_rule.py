@@ -15,4 +15,5 @@ class NotNullRule(BaseValidationRule):
         """
         Returns a Spark SQL expression that is TRUE if the column is NULL.
         """
+        print("Applying NotNullRule on column: %s", column_name)
         return F.col(column_name).isNull()
